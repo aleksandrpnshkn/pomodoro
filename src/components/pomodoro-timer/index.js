@@ -13,7 +13,9 @@ import Counter from "../counter";
 const PomodoroTimerContainer = styled.div`
     position: relative;
 
+    width: 100%;
     padding: 50px;
+    
     background: ${({ timerState, pomodoroState }) => {
       const isBreak = pomodoroState === 'shortBreak' || pomodoroState === 'longBreak';
       

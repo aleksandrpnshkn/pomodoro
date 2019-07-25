@@ -3,12 +3,13 @@ import styled from 'styled-components';
 
 import GlobalStyle from './../../theme/global-style';
 
-import Header from './../header';
 import PomodoroTimer from "../pomodoro-timer";
-import colors from "../../theme/colors";
 
 const AppContainer = styled.div`
+    display: flex;
+    align-items: center;
     width: 1000px;
+    min-height: 100vh;
     margin: 0 auto;
 `;
 

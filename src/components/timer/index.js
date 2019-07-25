@@ -110,12 +110,12 @@ class Timer extends Component {
   /**
    * @param {boolean} timeIsOver - For check if timer was stopped prematurely
    */
-  stopTimer = (timeIsOver) => {
+  stopTimer = (timeIsOver) => { // TODO определиться с остановкой таймера, засчитывать раунд или нет
     this.pauseTimer();
     this.setState({
       stage: 'stopped',
       wasStoppedPrematurely: !timeIsOver,
-      msLeft: null, // TODO состояние помодоро не согласовано с остановкой таймера пользователем и считает будто раунды выполнены
+      msLeft: null,
     });
   };
 

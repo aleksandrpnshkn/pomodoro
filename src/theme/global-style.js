@@ -6,6 +6,9 @@ export default createGlobalStyle`
     @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css');
 
     body {
+        
+        margin: 0;
+        
         font-family: 'Roboto', Arial, sans-serif;
         color: ${colors.textMain};
         
