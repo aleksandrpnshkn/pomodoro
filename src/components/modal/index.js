@@ -53,6 +53,15 @@ class Modal extends Component {
     });
   };
 
+  /**
+   * Close modal by click on the background
+   */
+  bgClickHandler = (e) => {
+    if (e.target.id === 'modal-background') {
+      this.closeModal();
+    }
+  };
+
   render() {
     const { title, children } = this.props;
 
@@ -62,7 +71,7 @@ class Modal extends Component {
     let content;
     if (this.state.isActive) {
       content = (
-        <ModalBackground>
+        <ModalBackground id="modal-background" onClick={this.bgClickHandler}>
           <ModalContainer>
             <ModalHeader>
               <h2>{title}</h2>
