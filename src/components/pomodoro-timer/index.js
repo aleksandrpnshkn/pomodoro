@@ -47,7 +47,8 @@ class PomodoroTimer extends Component {
   state = {
     currentStage: null, // 'work' || 'shortBreak' || 'longBreak'
     timerState: null,
-    completedWorkStages: 0,
+    completedTimers: 0,
+    completedWorks: 0,
     options: {
       duration: { // in ms
         shortBreak: 5 * 60 * 1000,
@@ -64,11 +65,17 @@ class PomodoroTimer extends Component {
     this.updateStage();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
+    const { completedWorks, completedTimers } = this.state;
     localStorage.setItem('PomodoroTimer', JSON.stringify(this.state)); // Save state in localStorage
 
-    if (this.state.completedWorkStages >= 12) { // Finish timer if all work stages completed
+    if (completedWorks >= 12) { // Finish timer if all work stages completed
       this.finishPomodoroTimer();
+    }
+
+    const timerCompleted = completedTimers !== prevState.completedTimers;
+    if (timerCompleted) { // If was incremented
+      this.updateStage();
     }
   }
 
@@ -91,13 +98,13 @@ class PomodoroTimer extends Component {
    * Update current stage
    */
   updateStage() {
-    const { completedWorkStages, currentStage: oldStage } = this.state;
+    const { completedWorks, completedTimers } = this.state;
 
     let newStage;
-    if (oldStage === 'work') { // Long break after 4 work stages
-      newStage = (completedWorkStages % 4 === 0) ? 'longBreak' : 'shortBreak';
-    } else {
+    if (completedTimers % 2 === 0) { // Work timers start from 0 (2, 4, 6...)
       newStage = 'work';
+    } else {
+      newStage = (completedWorks % 4 === 0) ? 'longBreak' : 'shortBreak';
     }
 
     this.setState({
@@ -148,31 +155,38 @@ class PomodoroTimer extends Component {
   /**
    * Increment completedWorks if current state is 'work'
    */
-  updateCompletedWorkStages() {
+  updateCompletedWorks() {
     const { currentStage } = this.state;
     if (currentStage === 'work') {
       this.setState((prevState) => {
         return {
-          completedWorkStages: prevState.completedWorkStages + 1,
+          completedWorks: prevState.completedWorks + 1,
         };
       })
     }
   }
 
+  incrementCompletedTimers() {
+    this.setState((prevState) => {
+      return {
+        completedTimers: prevState.completedTimers + 1
+      };
+    });
+  }
+
   handleTimerStop() {
     this.playFinishSound();
-    this.updateCompletedWorkStages();
-    this.updateStage();
+    this.updateCompletedWorks();
+    this.incrementCompletedTimers();
   }
 
   finishPomodoroTimer() {
-    alert('You completed all 12 pomodoros');
+    alert('You have completed all 12 pomodoros');
 
     this.setState({
-      completedWorkStages: 0,
+      completedWorks: 0,
+      completedTimers: 0,
     });
-
-    this.updateStage();
   }
 
   /**
@@ -199,16 +213,16 @@ class PomodoroTimer extends Component {
   }
 
   render() {
-    const { timerState, currentStage, completedWorkStages } = this.state;
+    const { timerState, currentStage, completedWorks } = this.state;
     const currentDuration = this.getCurrentDuration();
     const initialValues = this.getOptionsInMinutes();
 
     return (
       <PomodoroTimerContainer timerState={timerState} pomodoroState={currentStage}>
         <Header/>
-        <Timer duration={12000}
+        <Timer duration={currentDuration}
                handleStateChange={this.handleTimerStateChange} />
-        <PomodoroCounter completed={completedWorkStages} all={12} />
+        <PomodoroCounter completed={completedWorks} all={12} />
         <Modal title="Options"
                trigger={(
                  <PomodoroOptionsBtn type="button">
