@@ -21,8 +21,8 @@ const ModalContainer = styled.section`
     left: 50%;
     transform: translate(-50%, -50%);
     
-    width: 500px;
-    padding: 16px 24px;
+    //width: 500px;
+    padding: 32px 48px;
     
     background: ${colors.appBg};
     border-radius: 3px;
@@ -33,6 +33,7 @@ const ModalHeader = styled.header`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 8px;
 `;
 
 class Modal extends Component {

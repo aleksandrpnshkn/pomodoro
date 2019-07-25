@@ -6,8 +6,13 @@ import { Formik, Form } from 'formik';
 import { Field } from './../formik-modified';
 import Btn from "../btn";
 
-const OptionsFormik = styled(Formik)`
-    
+const OptionsSaveBtnWrapper = styled.div`
+    margin-top: 20px;
+    text-align: center;
+`;
+
+const OptionsField = styled(Field)`
+    margin-bottom: 5px;
 `;
 
 const Options = function(props) {
@@ -21,17 +26,19 @@ const Options = function(props) {
               refreshOptions(values);
             }} >
       <Form>
-        <Field label={'Work'} name={'duration.work'} type={'number'}
+        <OptionsField label={'Work'} name={'duration.work'} type={'number'}
                min={1} max={99} oneLine required />
-        <Field label={'Short Break'} name={'duration.shortBreak'} type={'number'}
+        <OptionsField label={'Short Break'} name={'duration.shortBreak'} type={'number'}
                min={1} max={59} oneLine required />
-        <Field label={'Long Break'} name={'duration.longBreak'} type={'number'}
+        <OptionsField label={'Long Break'} name={'duration.longBreak'} type={'number'}
                min={1} max={59} oneLine required />
 
-        <Btn>
-          <i className="fas fa-check"></i>
-          <span className="visuallyhidden">Save</span>
-        </Btn>
+        <OptionsSaveBtnWrapper>
+          <Btn>
+            <i className="fas fa-check"></i>
+            <span className="visuallyhidden">Save</span>
+          </Btn>
+        </OptionsSaveBtnWrapper>
       </Form>
     </Formik>
   );

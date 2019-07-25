@@ -7,8 +7,7 @@ import colors from './../../theme/colors';
 
 const StyledField = styled(Field)`
     box-sizing: border-box;
-    flex-grow: 1;
-    width: 100%;
+    width: 100px;
     padding: 4px 10px;
     
     font-size: inherit;
@@ -33,8 +32,10 @@ const Asterisk = styled.i`
 `;
 
 const Label = styled.label`
-    margin-right: 8px;
+    width: 50%;
+    margin-right: 24px;
     padding-bottom: ${(props) => (props.oneLine) ? '0' : '4px'};
+    text-align: right;
     white-space: nowrap;
 `;
 
