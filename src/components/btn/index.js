@@ -5,9 +5,10 @@ import colors from "../../theme/colors";
 
 const StyledButton = styled.button`
     margin: 2px;
-    padding: 6px 12px;
+    padding: 10px 16px;
     
-    font-size: 14px;
+    font-size: 24px;
+    line-height: 1;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.02em;

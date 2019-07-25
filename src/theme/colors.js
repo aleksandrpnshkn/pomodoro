@@ -7,4 +7,9 @@ export default {
   appBg: '#fcfcfc',
   textMain: '#262626',
   shadow: 'rgba(0, 0, 0, .1)',
+  timerBg: {
+    work: '#ffdfd4',
+    idle: '#fffed4',
+    break: '#dbffd4',
+  }
 };

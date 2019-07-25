@@ -7,6 +7,7 @@ import colors from './../../theme/colors';
 
 const StyledField = styled(Field)`
     box-sizing: border-box;
+    flex-grow: 1;
     width: 100%;
     padding: 4px 10px;
     

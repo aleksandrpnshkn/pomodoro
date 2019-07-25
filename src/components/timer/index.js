@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Btn from "../btn";
-import Dial from '../dial';
+import { TimerControls, TimerDial, TimerBtn } from './styled';
 
 class Timer extends Component {
   state = {
@@ -13,6 +12,14 @@ class Timer extends Component {
     msLeft: null, // ms
     interval: null,
   };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { stage } = this.state;
+    const { handleStateChange } = this.props;
+    if (stage !== prevState.stage) { // Call handler only if state is changed
+      handleStateChange(stage);
+    }
+  }
 
   /**
    * Calc time left
@@ -60,8 +67,8 @@ class Timer extends Component {
   handleTick = () => {
     this.updateTimeLeft();
 
-    if (this.state.msLeft <= 0) { // Check if timer is end
-      this.stopTimer();
+    if (this.state.msLeft <= 0) { // Check if timer is over. This check should be after msLeft change!
+      this.stopTimer(true);
     }
   };
 
@@ -70,16 +77,22 @@ class Timer extends Component {
    */
   startTimer = () => {
     const { msLeft } = this.state;
-    const durationInMs = (msLeft) ? msLeft : this.props.duration; // If msLeft is set, timer was paused
+    const { duration } = this.props;
+    const durationInMs = (msLeft) ? msLeft : duration; // If msLeft is set, timer was paused
     const startTimeStamp = Date.now();
     const endTimeStamp = startTimeStamp + durationInMs;
-    const interval = setInterval(this.handleTick, 1000);
 
     this.setState({
       stage: 'started',
-      interval,
       startTimeStamp,
       endTimeStamp,
+    });
+
+    setTimeout(() => this.handleTick(), 1); // Interval call the method only after 1s. Timeout due to setState's async
+    const interval = setInterval(this.handleTick, 1000);
+
+    this.setState({
+      interval
     });
   };
 
@@ -94,11 +107,15 @@ class Timer extends Component {
     });
   };
 
-  stopTimer = () => {
+  /**
+   * @param {boolean} timeIsOver - For check if timer was stopped prematurely
+   */
+  stopTimer = (timeIsOver) => {
     this.pauseTimer();
     this.setState({
       stage: 'stopped',
-      msLeft: null,
+      wasStoppedPrematurely: !timeIsOver,
+      msLeft: null, // TODO состояние помодоро не согласовано с остановкой таймера пользователем и считает будто раунды выполнены
     });
   };
 
@@ -108,40 +125,45 @@ class Timer extends Component {
 
     return (
       <div>
-        <Dial timeData={timeLeftData} />
-        <div>
-          <Btn type="button"
+        <TimerDial timeData={timeLeftData} />
+        <TimerControls>
+          <TimerBtn type="button"
                onClick={this.startTimer}
                disabled={stage === 'started'} >
             <>
               <i className="fas fa-play"/>
               <span className="visuallyhidden">{(stage === 'paused') ? 'Resume' : 'Start'}</span>
             </>
-          </Btn>
-          <Btn type="button"
+          </TimerBtn>
+          <TimerBtn type="button"
                onClick={this.pauseTimer}
                disabled={stage !== 'started'} >
             <>
               <i className="fas fa-pause"/>
               <span className="visuallyhidden">Pause</span>
             </>
-          </Btn>
-          <Btn type="button"
+          </TimerBtn>
+          <TimerBtn type="button"
                onClick={this.stopTimer}
-               disabled={stage !== 'started'} >
+               disabled={stage === 'stopped'} >
             <>
               <i className="fas fa-stop"/>
               <span className="visuallyhidden">Stop</span>
             </>
-          </Btn>
-        </div>
+          </TimerBtn>
+        </TimerControls>
       </div>
     );
   }
 }
 
+Timer.defaultProps = {
+  handleStateChange: () => {},
+};
+
 Timer.propTypes = {
   duration: PropTypes.number.isRequired, // duration in ms
+  handleStateChange: PropTypes.func,
 };
 
 export default Timer;

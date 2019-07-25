@@ -20,7 +20,7 @@ const convertNumToStr = function(num, length) {
   return num.toString().padStart(length, '0');
 };
 
-const Dial = function({ timeData }) {
+const Dial = function({ timeData, className }) {
   for (let timeUnit in timeData) {
     const value = timeData[timeUnit];
     timeData[timeUnit] = convertNumToStr(value, 2);
@@ -33,7 +33,7 @@ const Dial = function({ timeData }) {
   seconds = (seconds) ? <span>{seconds}</span> : null;
 
   return (
-    <DialContainer>
+    <DialContainer className={className}>
       {hours}
       {minutes}
       {seconds}
