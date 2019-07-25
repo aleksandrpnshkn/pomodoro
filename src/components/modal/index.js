@@ -77,7 +77,7 @@ class Modal extends Component {
               <h2>{title}</h2>
               <Btn type="button" onClick={this.closeModal}>
                 <i className="fas fa-times"/>
-                <span className="visuallyhidden">Закрыть</span>
+                <span className="visuallyhidden">Close</span>
               </Btn>
             </ModalHeader>
             <div>
